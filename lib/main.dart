@@ -90,7 +90,19 @@ class _MyAppState extends State<MyApp> {
           builder: ((_) {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
-              theme: ThemeData(primaryColor: Colors.black),
+              theme: ThemeData(
+                primaryColor: Colors.lightBlue[800],
+                textTheme: TextTheme(
+                  headline1: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                inputDecorationTheme: const InputDecorationTheme(
+                  floatingLabelBehavior: FloatingLabelBehavior.always,
+                ),
+              ),
               initialRoute: rootStore.autoStore.isAuthenticated
                   ? Routes.home
                   : Routes.login,
