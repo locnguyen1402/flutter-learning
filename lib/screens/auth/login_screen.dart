@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/common/form_builder_password_field.dart';
+import 'package:flutter_application_1/constants/keys.dart';
+import 'package:flutter_application_1/services/alert_service.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 import 'package:flutter_application_1/store/models/root_store.dart';
@@ -15,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
+  final alertService = AlertService();
   RootStore? store;
 
   @override
@@ -27,9 +30,21 @@ class _LoginScreenState extends State<LoginScreen> {
 
     if (isFormValid) {
       print(_formKey.currentState!.value.toString());
-      store!.autoStore.login();
+      store!.autoStore.login(
+        context,
+        username: _formKey.currentState!.value['username'],
+        password: _formKey.currentState!.value['password'],
+      );
     } else {
-      print("nhu hach");
+      // alertService.showTextConfirmDialog(
+      //   context,
+      //   title: "Error",
+      //   content: "Please fill in your username or password!",
+      //   okText: "Oke",
+      //   okCb: () {
+      //     AppKeys.navState.pop();
+      //   },
+      // );
     }
   }
 
@@ -57,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 height: 20,
               ),
               FormBuilderTextField(
-                name: 'userName',
+                name: 'username',
                 decoration: const InputDecoration(
                   labelText: 'Username',
                   border: OutlineInputBorder(),
@@ -77,6 +92,18 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               ElevatedButton(
                 onPressed: onLogin,
+                // onPressed: () {
+                //   final snackBar = SnackBar(
+                //     content: const Text('Yay! A SnackBar!'),
+                //     action: SnackBarAction(
+                //       label: 'Undo',
+                //       onPressed: () {
+                //         // Some code to undo the change.
+                //       },
+                //     ),
+                //   );
+                //   AppKeys.scaffoldMessengerState.showSnackBar(snackBar);
+                // },
                 child: const Text("Login"),
               ),
               const SizedBox(

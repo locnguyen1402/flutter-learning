@@ -52,11 +52,12 @@ mixin _$AuthStore on AuthStoreBase, Store {
       ActionController(name: 'AuthStoreBase', context: context);
 
   @override
-  void login() {
+  void login(BuildContext context,
+      {required String username, required String password}) {
     final _$actionInfo = _$AuthStoreBaseActionController.startAction(
         name: 'AuthStoreBase.login');
     try {
-      return super.login();
+      return super.login(context, username: username, password: password);
     } finally {
       _$AuthStoreBaseActionController.endAction(_$actionInfo);
     }

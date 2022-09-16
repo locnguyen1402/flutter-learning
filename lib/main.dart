@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_application_1/constants/style.dart';
 import 'package:flutter_application_1/services/preferences_service.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -91,16 +92,15 @@ class _MyAppState extends State<MyApp> {
             return MaterialApp(
               debugShowCheckedModeBanner: false,
               theme: ThemeData(
-                primaryColor: Colors.lightBlue[800],
+                primaryColor: AppStyles.primaryColor,
                 textTheme: TextTheme(
-                  headline1: TextStyle(
-                    fontSize: 30.0,
-                    fontWeight: FontWeight.bold,
-                    color: Theme.of(context).primaryColor,
-                  ),
+                  headline1: AppStyles.headline1,
                 ),
                 inputDecorationTheme: const InputDecorationTheme(
                   floatingLabelBehavior: FloatingLabelBehavior.always,
+                ),
+                snackBarTheme: const SnackBarThemeData(
+                  behavior: SnackBarBehavior.floating,
                 ),
               ),
               initialRoute: rootStore.autoStore.isAuthenticated
@@ -115,6 +115,7 @@ class _MyAppState extends State<MyApp> {
                 ...FormBuilderLocalizations.delegate.supportedLocales
               ],
               navigatorKey: AppKeys.navKey,
+              scaffoldMessengerKey: AppKeys.scaffoldMessengerKey,
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
                 GlobalWidgetsLocalizations.delegate,
