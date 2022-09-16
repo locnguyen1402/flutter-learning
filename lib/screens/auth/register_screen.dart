@@ -2,63 +2,44 @@ import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/common/form_builder_password_field.dart';
 import 'package:flutter_application_1/constants/keys.dart';
 import 'package:flutter_application_1/constants/route.dart';
-import 'package:flutter_application_1/models/params/login_params.dart';
 import 'package:flutter_application_1/services/alert_service.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-
-import 'package:flutter_application_1/store/models/root_store.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
-import 'package:provider/provider.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatefulWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final alertService = AlertService();
-  RootStore? store;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void onLogin() {
+  void onRegister() {
     final isFormValid = _formKey.currentState!.saveAndValidate();
 
     if (isFormValid) {
-      final loginParams = LoginParams.fromJson(_formKey.currentState!.value);
+      print(_formKey.currentState!.value.toString());
 
-      store!.autoStore.login(
-        context,
-        username: loginParams.username,
-        password: loginParams.password,
-      );
+      AppKeys.navState.pushReplacementNamed(Routes.login);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    store = Provider.of<RootStore>(context);
-
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: FormBuilder(
-          key: _formKey,
-          autovalidateMode: AutovalidateMode.always,
-          onChanged: () {
-            _formKey.currentState!.saveAndValidate();
-          },
+      body: FormBuilder(
+        key: _formKey,
+        autovalidateMode: AutovalidateMode.always,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Log In",
+                "Register",
                 style: Theme.of(context).textTheme.headline1,
               ),
               const SizedBox(
@@ -85,25 +66,35 @@ class _LoginScreenState extends State<LoginScreen> {
               const SizedBox(
                 height: 20,
               ),
-              ElevatedButton(
-                onPressed: onLogin,
-                child: const Text("Login"),
+              FormBuilderPasswordField(
+                name: 'confirmPassword',
+                label: 'Confirm Password',
+                validator: FormBuilderValidators.compose<String>(
+                  [
+                    FormBuilderValidators.required(
+                      errorText: "Required nè he!",
+                    ),
+                    (val) {
+                      String password =
+                          _formKey.currentState!.fields['password']!.value ??
+                              "";
+
+                      if (password.isNotEmpty && password != val) {
+                        return "Not match";
+                      }
+
+                      return null;
+                    }
+                  ],
+                ),
               ),
               const SizedBox(
-                height: 15,
+                height: 20,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Text("Already have an account ?"),
-                  TextButton(
-                    onPressed: () {
-                      AppKeys.navState.pushNamed(Routes.register);
-                    },
-                    child: const Text("Register !"),
-                  )
-                ],
-              )
+              ElevatedButton(
+                onPressed: onRegister,
+                child: const Text("Register"),
+              ),
             ],
           ),
         ),
