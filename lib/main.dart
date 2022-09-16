@@ -8,6 +8,7 @@ import 'package:mobx/mobx.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'app_route_observer.dart';
 import 'store/models/root_store.dart';
 
 import 'constants/route.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
   final List<ReactionDisposer> _disposers = List.from([]);
 
   late final RootStore rootStore;
@@ -107,6 +109,7 @@ class _MyAppState extends State<MyApp> {
                   ? Routes.home
                   : Routes.login,
               // initialRoute: Routes.home,
+              navigatorObservers: [AppRouteObserver()],
               routes: {
                 ...authRoutes,
                 ...protectedRoutes,
